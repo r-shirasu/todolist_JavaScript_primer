@@ -14,18 +14,22 @@ export class App {
     const todoItemCountElement = document.querySelector("#js-todo-count");
     // 2. TodoListModelの状態が更新されたら表示を更新する
     this.todoListModel.onChange(() => {
-      // TodoリストをまとめるList要素
       const todoListElement = element`<ul />`;
-      // それぞれのTodoItem要素をtodoListElement以下へ追加する
       const todoItems = this.todoListModel.getTodoItems();
       todoItems.forEach((item) => {
-        const todoItemElement = element`<li><input type="checkbox" class="checkbox">${item.title}</li>`;
+        // 完了済みならchecked属性をつけ、未完了ならchecked属性を外す
+        // const todoItemElement = element`<li><input type="checkbox" class="checkbox">${item.title}</li>`;
+        const todoItemElement = item.completed
+          ? element`<li><input type="checkbox" class="checkbox" checked><s>${item.title}</s></li>`
+          : element`<li><input type="checkbox" class="checkbox">${item.title}</li>`;
         // クラス名checkboxを持つ要素を取得
         const inputCheckboxElement = todoItemElement.querySelector(".checkbox");
         // `<input type="checkbox">`のチェックが変更されたときに呼ばれるイベントリスナーを登録
         inputCheckboxElement.addEventListener("change", () => {
-          // チェックボックスの表示が変わったタイミングで呼び出される処理
-          // TODO: ここでモデルを更新する処理を呼ぶ
+          this.todoListModel.updateTodo({
+            id: item.id,
+            completed: !item.completed,
+          });
         });
         todoListElement.appendChild(todoItemElement);
       });
