@@ -19,7 +19,14 @@ export class App {
       // それぞれのTodoItem要素をtodoListElement以下へ追加する
       const todoItems = this.todoListModel.getTodoItems();
       todoItems.forEach((item) => {
-        const todoItemElement = element`<li>${item.title}</li>`;
+        const todoItemElement = element`<li><input type="checkbox" class="checkbox">${item.title}</li>`;
+        // クラス名checkboxを持つ要素を取得
+        const inputCheckboxElement = todoItemElement.querySelector(".checkbox");
+        // `<input type="checkbox">`のチェックが変更されたときに呼ばれるイベントリスナーを登録
+        inputCheckboxElement.addEventListener("change", () => {
+          // チェックボックスの表示が変わったタイミングで呼び出される処理
+          // TODO: ここでモデルを更新する処理を呼ぶ
+        });
         todoListElement.appendChild(todoItemElement);
       });
       // containerElementの中身をtodoListElementで上書きする
